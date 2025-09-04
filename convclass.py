@@ -47,7 +47,6 @@ class ConvLayer:
         # 3D filter spanning all channels
         filter_to_use = np.stack([self.filter]*self.no_of_channels, axis=-1)
         # shape now: (fh, fw, C)
-
         filter_height, filter_width, _ = filter_to_use.shape
         out_height = (self.input_dim_x + 2 * self.padding - filter_height) // self.stride + 1
         out_width  = (self.input_dim_y + 2 * self.padding - filter_width) // self.stride + 1
@@ -71,3 +70,18 @@ class ConvLayer:
         pass 
 
 
+class PoolLayer:
+    def forward(self, input):
+        ...
+        # max pooling or average pooling
+    def backward(self, d_output):
+        # propagate gradients
+        pass 
+
+class FCLayer:
+    def forward(self, input):
+        # linear + activation
+        pass 
+    def backward(self, d_output):
+        # backprop through weights
+        pass 
