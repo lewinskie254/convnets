@@ -66,18 +66,5 @@ class ConvLayer:
         pass 
 
 
-class PoolLayer:
-    def forward(self, input):
-        ...
-        # max pooling or average pooling
-    def backward(self, d_output):
-        # propagate gradients
-        pass 
 
-class FCLayer:
-    def forward(self, input):
-        # linear + activation
-        pass 
-    def backward(self, d_output):
-        # backprop through weights
-        pass 
+
