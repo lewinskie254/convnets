@@ -34,7 +34,6 @@ class ConvLayer:
             case _: 
                 self.filter =self.horizontal_edges_filter 
             
-            
 
     def add_padding(self, image, padding, mode='constant', constant_values=0): 
         return np.pad(image, ((padding, padding), (padding, padding), (0, 0)), mode=mode, constant_values=constant_values)
@@ -61,9 +60,6 @@ class ConvLayer:
 
         return convolved
 
-
-        
-                        
 
 
     def backward(self): 
