@@ -39,7 +39,6 @@ class ConvLayer:
         return np.pad(image, ((padding, padding), (padding, padding), (0, 0)), mode=mode, constant_values=constant_values)
 
         
-
     def forward(self, x):
         image = self.add_padding(x, self.padding)  # padded image
 
