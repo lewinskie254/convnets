@@ -1,38 +1,37 @@
 import numpy as np 
 
 class ConvLayer: 
-    def __init__(self, image, filter='horizontal', stride=1, padding=0, lr = 0.001):
+    def __init__(self, image, filter='horizontal', stride=1, padding=0, lr=0.001):
         self.input_dim_x = image.shape[0]   # height
         self.input_dim_y = image.shape[1]   # width
         self.no_of_channels = image.shape[2]  # channels
         self.learning_rate = lr 
-        #Filters to use 
-        self.horizontal_edges_filter = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]]) 
-        self.vertical_edges_filter = np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]]) 
-        self.sharpen_edges_filter = np.array([[0, -1, 0], [-1, 5, -1], [0, -1,  0]]) 
-        self.emboss_filter = np.array([[-2, -1,  0], [-1,  1,  1], [ 0, 1, 2]])
-        self.gaussian_blur_filter = np.array([[1, 2, 1],[2, 4, 2],[1, 2, 1]]) / 16
-        self.box_blur_filter = np.array([[1, 1, 1],[1, 1, 1],[1, 1, 1]]) / 9
+
+        # Ensure image is float
+        self.image = image.astype(np.float64)
+
+        # Filters as float64
+        self.horizontal_edges_filter = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]], dtype=np.float64)
+        self.vertical_edges_filter = np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]], dtype=np.float64)
+        self.sharpen_edges_filter = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]], dtype=np.float64)
+        self.emboss_filter = np.array([[-2, -1, 0], [-1, 1, 1], [0, 1, 2]], dtype=np.float64)
+        self.gaussian_blur_filter = np.array([[1, 2, 1],[2, 4, 2],[1, 2, 1]], dtype=np.float64) / 16
+        self.box_blur_filter = np.array([[1, 1, 1],[1, 1, 1],[1, 1, 1]], dtype=np.float64) / 9
 
         self.filter_dim_x = self.horizontal_edges_filter.shape[0]
         self.filter_dim_y = self.horizontal_edges_filter.shape[1]
         self.stride = stride
         self.padding = padding 
-        self.image = image 
 
-        match filter: 
-            case 'horizontal': 
-                self.filter = self.horizontal_edges_filter 
-            case 'vertical': 
-                self.filter =self.vertical_edges_filter 
-            case 'sharpen' :
-                self.filter = self.sharpen_edges_filter 
-            case 'emboss' :
-                self.filter = self.emboss_filter 
-            case 'gaussian' : 
-                self.filter = self.gaussian_blur_filter 
-            case _: 
-                self.filter =self.horizontal_edges_filter 
+        # Select filter
+        match filter:
+            case 'horizontal': self.filter = self.horizontal_edges_filter
+            case 'vertical': self.filter = self.vertical_edges_filter
+            case 'sharpen': self.filter = self.sharpen_edges_filter
+            case 'emboss': self.filter = self.emboss_filter
+            case 'gaussian': self.filter = self.gaussian_blur_filter
+            case _: self.filter = self.horizontal_edges_filter
+
             
 
     def add_padding(self, image, padding, mode='constant', constant_values=0): 
