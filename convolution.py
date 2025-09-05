@@ -1,11 +1,11 @@
 import numpy as np 
 
 class ConvLayer: 
-    def __init__(self, image, filter='horizontal', stride=1, padding=0):
+    def __init__(self, image, filter='horizontal', stride=1, padding=0, lr = 0.001):
         self.input_dim_x = image.shape[0]   # height
         self.input_dim_y = image.shape[1]   # width
         self.no_of_channels = image.shape[2]  # channels
-
+        self.learning_rate = lr 
         #Filters to use 
         self.horizontal_edges_filter = np.array([[1, 2, 1], [0, 0, 0], [-1, -2, -1]]) 
         self.vertical_edges_filter = np.array([[1, 0, -1], [2, 0, -2], [1, 0, -1]]) 
@@ -57,7 +57,7 @@ class ConvLayer:
                 convolved[i//self.stride, j//self.stride] = np.sum(region * filter_to_use)
 
 
-        return convolved
+        return convolved[..., np.newaxis]
 
 
 

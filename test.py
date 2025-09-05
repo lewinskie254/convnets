@@ -11,3 +11,4 @@ print(arr)
 padded = np.pad(arr, pad_width=1, mode='constant', constant_values=0)
 
 print(padded)
+print(arr[..., np.newaxis].shape)
