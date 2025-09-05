@@ -61,8 +61,46 @@ class ConvLayer:
 
 
 
-    def backward(self): 
-        pass 
+    def backward(self, d_output):
+        """
+        d_output: gradient of loss wrt this layer’s output (shape same as forward output)
+        returns: gradient wrt input (for passing to previous layer)
+        """
+
+        # Pad input image
+        image = self.add_padding(self.image, self.padding)
+        filter_to_use = np.stack([self.filter]*self.no_of_channels, axis=-1)
+        fh, fw, _ = filter_to_use.shape
+
+        # Initialize grads
+        d_input = np.zeros_like(image)            # same shape as padded input
+        d_filter = np.zeros_like(filter_to_use)   # same shape as filter
+
+        out_height, out_width = d_output.shape[:2]
+
+        for i in range(out_height):
+            for j in range(out_width):
+                # region of input that produced this output pixel
+                region = image[i*self.stride:i*self.stride+fh, j*self.stride:j*self.stride+fw, :]
+
+                # gradient wrt filter (how much filter contributed to loss)
+                d_filter += region * d_output[i, j]
+
+                # gradient wrt input (how much input contributed to loss)
+                d_input[i*self.stride:i*self.stride+fh, j*self.stride:j*self.stride+fw, :] += filter_to_use * d_output[i, j]
+
+        # update filter (SGD step)
+        filter_to_use -= self.learning_rate * d_filter
+
+        # since we stored self.filter as 2D (not 3D), take one channel back
+        self.filter = filter_to_use[:, :, 0]
+
+        # remove padding from d_input before returning
+        if self.padding > 0:
+            d_input = d_input[self.padding:-self.padding, self.padding:-self.padding, :]
+
+        return d_input
+
 
 
 
