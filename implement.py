@@ -1,8 +1,8 @@
 import h5py
 import numpy as np
-from .convolution import ConvLayer
-from .pooling import PoolLayer
-from .linear import FCLayer
+from convolution import ConvLayer
+from pooling import PoolLayer
+from linear import FCLayer
 
 # ---------------------------
 # Dataset Loading & Preprocessing
