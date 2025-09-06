@@ -1,6 +1,4 @@
 import numpy as np 
-
-
 class ConvLayer:
     def __init__(self, filter, stride=1, padding=0, lr=0.01):
         self.stride = stride
